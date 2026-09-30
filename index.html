@@ -18,14 +18,61 @@ main{flex:1;position:relative;min-height:0}
 iframe{width:100%;height:100%;border:0;background:#fff}
 #home{overflow:auto;padding:28px 16px}
 .wrap{max-width:1000px;margin:0 auto}
-h1{font-size:1.9rem;margin:0 0 6px}.lead{color:var(--mut);max-width:780px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin:24px 0}
-.card{background:var(--pan);border:1px solid var(--ln);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:8px}
+h1{font-size:1.9rem;margin:0 0 6px;text-align:center;}
+.lead{color:var(--mut);max-width:780px;text-align:center;margin:0 auto 20px;}
+
+/* NUEVO DISEÑO: Contenedor en forma de Triángulo de Einthoven */
+.einthoven-container {
+    position: relative;
+    width: 100%;
+    max-width: 750px;
+    height: 480px;
+    margin: 30px auto;
+}
+
+/* Opcional: Líneas de fondo del triángulo estéticas */
+.einthoven-container::before {
+    content: '';
+    position: absolute;
+    top: 50px;
+    left: 80px;
+    right: 80px;
+    bottom: 30px;
+    border: 2px dashed rgba(56, 189, 248, 0.25);
+    border-top: none;
+    pointer-events: none;
+}
+
+.card {
+    position: absolute;
+    width: 280px;
+    background: var(--pan);
+    border: 1px solid var(--ln);
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* Posiciones exactas para los vértices del triángulo */
+.vertex-left { top: 10px; left: 10px; }       /* Brazo derecho / Vértice superior izquierdo */
+.vertex-right { top: 10px; right: 10px; }     /* Brazo izquierdo / Vértice superior derecho */
+.vertex-bottom { bottom: 10px; left: 50%; transform: translateX(-50%); } /* Pierna izquierda / Vértice inferior */
+
 .card .n{color:var(--ok);font-weight:700;font-size:.8rem;letter-spacing:.08em}
 .card h2{margin:0;font-size:1.2rem}.card p{margin:0;color:var(--mut);flex:1}
 .card button{margin-top:8px;background:var(--ok);color:#03150e;border:0;padding:10px;border-radius:8px;font:inherit;font-weight:700;cursor:pointer}
-.info{background:var(--pan);border:1px solid var(--ln);border-radius:14px;padding:18px;color:var(--mut)}.info b{color:var(--tx)}
+.info{background:var(--pan);border:1px solid var(--ln);border-radius:14px;padding:18px;color:var(--mut);margin-top:20px;text-align:center}.info b{color:var(--tx)}
 .hint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);background:rgba(18,27,44,.95);border:1px solid var(--ln);padding:6px 12px;border-radius:99px;font-size:.8rem;color:var(--mut);max-width:92%;text-align:center;pointer-events:none}
+
+@media(max-width:768px){
+    /* En pantallas pequeñas o celulares, apilamos las tarjetas en vertical para que no se choquen */
+    .einthoven-container { height: auto; display: flex; flex-direction: column; gap: 16px; }
+    .card { position: relative; width: 100%; top: auto; left: auto; right: auto; transform: none; }
+    .einthoven-container::before { display: none; }
+}
 @media(max-width:640px){.brand{width:100%}}
 </style></head><body>
 <header>
@@ -41,12 +88,32 @@ h1{font-size:1.9rem;margin:0 0 6px}.lead{color:var(--mut);max-width:780px}
 <main>
   <section id="home" class="view on"><div class="wrap">
     <h1>Sistema de Simulación de Señales ECG</h1>
-    <p class="lead">Plataforma educativa para aprender arritmias cardíacas en tres pasos: estudia el curso, practica con el simulador en tiempo real y ponte a prueba con el juego.</p>
-    <div class="cards">
-      <div class="card"><div class="n">VENTANA 1</div><h2>📚 Aprendizaje</h2><p>Curso en Coursebox: introducción al ECG y las 27 arritmias, con descripción, GIF, signos de riesgo, síntomas y tratamiento.</p><button onclick="ir('v1')">Entrar al curso</button></div>
-      <div class="card"><div class="n">VENTANA 2</div><h2>📈 Simulador de ritmos</h2><p>Osciloscopio en Canvas (derivación II) con ondas P-QRS-T paramétricas, sonido sincronizado con la onda R y clasificación de 27 ritmos con nivel de credibilidad.</p><button onclick="ir('v2')">Abrir simulador</button></div>
-      <div class="card"><div class="n">VENTANA 3</div><h2>🎮 Juego de 3 niveles</h2><p>Electrodos, diagnóstico con asistente de IA y rompecabezas de ECG, con tabla de clasificación.</p><button onclick="ir('v3')">Jugar ahora</button></div>
+    <p class="lead">Plataforma educativa para aprender arritmias cardíacas inspirada en el Triángulo de Einthoven.</p>
+    
+    <!-- CONTENEDOR TRIANGULAR -->
+    <div class="einthoven-container">
+      <div class="card vertex-left">
+        <div class="n">D I / VÉRTICE SUPERIOR IZQ</div>
+        <h2>📚 Aprendizaje</h2>
+        <p>Curso en Coursebox: introducción al ECG y las 27 arritmias, con descripción, GIF y síntomas.</p>
+        <button onclick="ir('v1')">Entrar al curso</button>
+      </div>
+      
+      <div class="card vertex-right">
+        <div class="n">D II / VÉRTICE SUPERIOR DER</div>
+        <h2>📈 Simulador</h2>
+        <p>Osciloscopio en Canvas (derivación II) con ondas P-QRS-T y sonido sincronizado.</p>
+        <button onclick="ir('v2')">Abrir simulador</button>
+      </div>
+      
+      <div class="card vertex-bottom">
+        <div class="n">D III / VÉRTICE INFERIOR</div>
+        <h2>🎮 Juego de Niveles</h2>
+        <p>Electrodos, diagnóstico clínico con IA y rompecabezas de ECG interactivos.</p>
+        <button onclick="ir('v3')">Jugar ahora</button>
+      </div>
     </div>
+
     <div class="info"><b>Ruta sugerida:</b> Aprendizaje → Simulador → Juego. <b>Nota:</b> las ondas son sintéticas y didácticas; esta herramienta no sirve para diagnóstico clínico.</div>
   </div></section>
   <section id="v1" class="view"></section>
@@ -54,13 +121,11 @@ h1{font-size:1.9rem;margin:0 0 6px}.lead{color:var(--mut);max-width:780px}
   <section id="v3" class="view"></section>
 </main>
 <script>
-// ====== CONFIGURACIÓN: cambia aquí las direcciones de cada ventana ======
 const VENTANAS = {
   v1: { titulo:'Aprendizaje', url:'https://my.coursebox.ai/courses/01a07d91-ed8f-7cfc-b634-04aaeebcadc6/about' },
-  v2: { titulo:'Simulador',   url:'simulador/index.html' },   // carpeta local incluida en este proyecto
-  v3: { titulo:'Juego',       url:'game/index.html' }   // carpeta local incluida en este proyecto
+  v2: { titulo:'Simulador',   url:'simulador/index.html' },
+  v3: { titulo:'Juego',       url:'game/index.html' }
 };
-// =========================================================================
 const cargadas = {};
 function ir(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));
